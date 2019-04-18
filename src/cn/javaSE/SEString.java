@@ -11,12 +11,12 @@ public class SEString {
         String string = new String();
         string.intern();
     }
-    class InnerSEString{
-
-    }
     public static void main(String[] args)
     {
-        SEString seString = new SEString();
-        InnerSEString innerSEString = seString.new InnerSEString();
+    }
+    public void strStr(String haystack,String needle)
+    {
+        String str = "ssss";
+        str.indexOf("sss");
     }
 }
