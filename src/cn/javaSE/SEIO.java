@@ -39,4 +39,14 @@ public class SEIO {
         }
         bufferedReader.close();
     }
+
+    /**
+     * 列出磁盘下所有文件
+     * @param dir
+     */
+    public void listAllFiles(File dir)
+    {
+        if(dir == null||dir.exists())
+            return;
+    }
 }
