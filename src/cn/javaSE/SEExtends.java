@@ -94,5 +94,7 @@ class D extends B {
         System.out.println(b.show(b));  // B and B
         System.out.println(b.show(c));  // B and B
         System.out.println(b.show(d));  // A and D
+        System.out.println(a2.getClass());
+        System.out.println(b.getClass());
     }
 }
