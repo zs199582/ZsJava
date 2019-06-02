@@ -2,11 +2,9 @@ package cn.dataStruct;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.TreeSet;
-
 //二叉树
 public class Tree {
-    Node root;
+    TreeNode root;
     public Tree()
     {
         root = null;
@@ -14,15 +12,15 @@ public class Tree {
     @Test
     public void insert(int data)
     {
-        Node newNode = new Node(data);
+        TreeNode newNode = new TreeNode(data);
         if(root == null)
         {
             this.root = newNode;
         }
         else
         {
-            Node current;
-            Node parent;
+            TreeNode current;
+            TreeNode parent;
             current = root;
             while (true) {
                 parent = current;
@@ -56,7 +54,7 @@ public class Tree {
         }
     }
     //中序遍历
-    public void inOrder(Node root){
+    public void inOrder(TreeNode root){
         if(root!=null)
         {
             inOrder(root.left);
@@ -65,7 +63,7 @@ public class Tree {
         }
     }
     //前序遍历
-    public void preOrder(Node root)
+    public void preOrder(TreeNode root)
     {
         if(root!= null)
         {
@@ -75,7 +73,7 @@ public class Tree {
         }
     }
     //后序遍历
-    public void postOrder(Node root)
+    public void postOrder(TreeNode root)
     {
         if(root!=null)
         {
@@ -97,11 +95,11 @@ public class Tree {
         testTree.inOrder(testTree.root);
     }
 }
-class Node{
+class TreeNode {
     int data;
-    Node left;
-    Node right;
-    Node(int data)
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int data)
     {
         this.data = data;
         left = null;

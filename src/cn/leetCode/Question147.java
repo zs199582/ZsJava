@@ -6,6 +6,25 @@ public class Question147 {
         int [] nums = new int[]{4};
         ListNode listNode = Question147.insertionSortList(ListUtils.getListNode(nums));
         ListUtils.printListNode(listNode);
+        String str = "1 2 3 4 5";Question147.test(str);
+        System.out.println(str);
+    }
+    public static void test(String str)
+    {
+        str.trim();
+
+    }
+    public int maxProduct(int[] nums) {
+        if(nums == null||nums.length == 0) return 0;
+        int length = nums.length;
+        int max = nums[0];
+        int num = nums[0];
+        for(int i = 1;i<length;i++)
+        {
+            max = Math.max(max,nums[i]*num);
+            num = nums[i];
+        }
+        return max;
     }
     public static ListNode insertionSortList(ListNode head) {
     if(head == null ||head.next == null) return head;
