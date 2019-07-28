@@ -3,6 +3,14 @@ package cn.designMode;
 /**
  * 单例模式 保证一个类只能实例化一次
  */
+
+import com.sun.javafx.binding.StringFormatter;
+
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+
 /**
  * 优点：
  *     1.在单例模式中，活动的单例只有一个实例，对单例类的所有实例化得到的都是相同的一个实例。这样就 防止其它对象对自己的实例化，
@@ -68,5 +76,20 @@ class TheSecondSingleton{
             theSecondSingleton = new TheSecondSingleton();
         }
         return theSecondSingleton;
+    }
+}
+class TheThirdSingleton{
+    private TheThirdSingleton(){};
+    private static Object object = new Object();
+    private static TheThirdSingleton theThirdSingleton;
+    public TheThirdSingleton getInstance(){
+        //两次判断是否等于null
+        if(theThirdSingleton == null){
+            synchronized(object){
+                if(theThirdSingleton == null)
+                    theThirdSingleton = new TheThirdSingleton();
+            }
+        }
+        return theThirdSingleton;
     }
 }

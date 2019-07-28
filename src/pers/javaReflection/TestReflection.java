@@ -15,7 +15,6 @@ public class TestReflection implements Serializable {
         TestReflection reflectionInstance = (TestReflection)reflectionClazz.newInstance();
         Method method = reflectionClazz.getMethod("print");
         method.invoke(reflectionInstance);
-        HashMap.Entry entry = new HashMap.Entry<String,Integer>();
     }
 
 }

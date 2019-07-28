@@ -5,12 +5,13 @@ import java.util.Arrays;
 /**
  * 选择排序
  */
-public class SortAlgorithms<T extends Comparable<T>>extends Sort<T>{
+public class SortAlgorithms<T extends Comparable<T>>extends Sort<T> {
     public static void main(String[] args)
     {
         SortAlgorithms sortAlgorithms = new SortAlgorithms<Integer>();
-        int[] nums = {1,2,3,4,5,6,7};
-        sortAlgorithms.reOrderArray(nums);
+        int[] nums = {6,5,1,6,10,56,7};
+//        sortAlgorithms.reOrderArray(nums);
+        sortAlgorithms.quickSortExercise2(nums);
         System.out.println(Arrays.toString(nums));
     }
     //region选择排序
@@ -20,12 +21,14 @@ public class SortAlgorithms<T extends Comparable<T>>extends Sort<T>{
         for(int i = 0;i<arrs.length;i++)
         {
             min = i;
+            //从后面所有的元素里选一个最小的
             for(int j = i+1;j<arrs.length;j++)
             {
                 if(less(arrs[j],arrs[min])) {
                     min = j;
                 }
             }
+            //把最小值和当前值互换
             swap(arrs,i,min);
         }
     }
@@ -97,12 +100,12 @@ public class SortAlgorithms<T extends Comparable<T>>extends Sort<T>{
         T base = arrs[i];
         while(i!=j)
         {
-            while(j>i&&!less(arrs[j],base))  //当找到哨兵右侧小于哨兵的值后跳出循环
+            while(j>i&&!less(arrs[j],base))  //当找到哨兵右侧小于或者等于哨兵的值后跳出循环
             {
                 j--;
             }
             arrs[i] = arrs[j];
-            while(j>i&&less(arrs[i],base))   //找到哨兵左侧大于哨兵的值后跳出循环
+            while(j>i&&less(arrs[i],base))   //找到哨兵左侧大于或者等于哨兵的值后跳出循环
             {
                 i++;
             }
@@ -113,8 +116,48 @@ public class SortAlgorithms<T extends Comparable<T>>extends Sort<T>{
 
     }
     //endregion
+    //region 快排优化
+    //1.在数组长度大于某一范围时使用快排，小于某一阈值时，使用直接插入排序
+    //2.选择哨兵pivot的时候，不使用数组第一个数字，选取数组左中右三个位置的中间大小的数字
+    //3.进行三路partition优化，将数组
+//    public void quickSortOptim(int[] nums){
+//        quickSortOptimBody(nums,0,nums.length-1);
+//    }
+
+//    private void quickSortOptimBody(int[] nums, int i, int length) {
+//        if(i>=length) return;
+//        if((length-i)<10)    //数组长度小于10，直接使用插入排序
+//            inserSort(nums,i,length);
+//        else
+//        {
+//          int pivot = findPivotOptim(nums,i,length);
+//          quickSortOptimBody(nums,i,pivot-1);
+//          quickSortOptimBody(nums,pivot+1,length);
+//        }
+//    }
+//    private int findPivotOptim(int[]nums,int start,int end){
+//        int pivot = getMidNum(nums[start],nums[end],nums[(start+end)/2]);
+//        int lt=start,gt = end;
+//        //四个指针
+//    }
+    private int getMidNum(int a,int b,int c){
+        int min,max;
+        if(a<=b){
+            min = a;
+            max = b;
+        }
+        else {
+            min = b;
+            max = a;
+        }
+        if(c<=min) return min;
+        else if(c>=max) return max;
+        else if(c>min&&c<max) return c;
+        return -1;
+    }
+    //endregion
     //region 堆排序
-    public void heapSort(T[]arrs)
+    public void heapSort(int[]arrs)
     {
         //构建堆
         for(int i = arrs.length/2-1;i>=0;i--)
@@ -128,9 +171,14 @@ public class SortAlgorithms<T extends Comparable<T>>extends Sort<T>{
             adjustHeap(arrs,0,j);
         }
     }
-    public void adjustHeap(T[]arrs, int i, int length)
+    public void swap(int[] arr,int i,int j){
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    public void adjustHeap(int[]arrs, int i, int length)
     {
-        T temp = arrs[i];
+        int temp = arrs[i];
         //对第i个结点，和叶子结点比较
         for(int k=i*2+1;k<length;k=k*2+1)
         {
@@ -166,7 +214,7 @@ public class SortAlgorithms<T extends Comparable<T>>extends Sort<T>{
         int i = left; //左半部分指针
         int j = mid+1;//右半部分指针
         int tempCounter = 0;//临时数组指针
-
+        //把左右两个已经排好序的子数组按数字大小填进临时数组里
         while(i<mid&&j<right)
         {
             if(less(arrs[j],arrs[i]))
@@ -237,4 +285,103 @@ public class SortAlgorithms<T extends Comparable<T>>extends Sort<T>{
         }
         array = tempArray;
     }
+
+    //region 希尔排序练习
+    public void shellSortExercise(int[] array){
+        int length = array.length;
+        int increment = length; //increment最小也是1
+        do{
+            increment=increment/3+1;
+            for(int i = increment;i<length;i+=increment) {
+                while (array[i] < array[i - increment]) {
+                    swap(array, i, i - increment);
+                }
+            }
+        }
+        while(increment>1);
+    }
+    //endregion
+    //region 快排的三向切分优化
+    //5，7，6，1，8，21，3，8
+    //lt,gt
+    public void qSort(int[] nums,int lo,int hi){
+        if(hi>=lo) return;
+        int lt = lo;
+        int gt = hi;
+        int i = lo+1;
+        int pivot = nums[lo];
+        while(i<=gt){
+            if(nums[i]<pivot)
+                swap(nums,i++,lt++);
+            else if(nums[i]>pivot)
+                swap(nums,i++,gt--);
+            else i++;
+        }
+        qSort(nums,lo,lt-1);
+        qSort(nums,gt+1,hi);
+    }
+    //endregion
+    //region 堆排序练习
+    public void heapSortExercise(int[] nums){
+        //参数检查
+        if(nums == null) return;
+        int length = nums.length;
+        //先构建堆
+        for(int i = length/2;i>=0;i--){
+            maxHeap(nums,i,length);
+        }
+        //互换，调整堆
+        for(int j = length-1;j>0;j--){
+            swap(nums,j,0);
+            maxHeap(nums,0,j);
+        }
+    }
+    public void maxHeap(int[] nums,int start,int end){
+//        if(start<=end) return;
+        int temp = nums[start];
+//        int k = start;
+//        while(index<=end){
+            for(int k = start*2+1;k<end;k=k*2+1) {
+                if (k+1<end&&nums[k] < nums[k + 1])
+                    k++;
+                if (nums[k]>nums[start]){
+                    nums[start] = nums[k];
+                    start = k;
+                }
+            }
+            nums[start] = temp;
+//        }
+    }
+    //endregion
+    //region 快排练习7.27
+    public void quickSortExercise2(int[] array){
+        if(array==null) return;
+        quickSortExercise2Body(array,0,array.length-1);
+    }
+    public int findPivot2(int[] array,int start,int end){
+        int temp = array[start];
+        int left = start;
+        int right = end;
+        while(left<right){
+            while(left<right&&!less(array[right],temp)){
+                right--;
+            }
+            array[left] = array[right];
+            while(left<right&&!less(temp,array[left]))
+            {
+                left++;
+            }
+            array[right] = array[left];
+        }
+        array[left] = temp;
+        return left;
+    }
+    public void quickSortExercise2Body(int[] nums,int start,int end){
+        if(start>=end) return;
+        int pivot = findPivot2(nums,start,end);
+        System.out.println(pivot);
+        quickSortExercise2Body(nums,start,pivot-1);
+        quickSortExercise2Body(nums,pivot+1,end);
+    }
+    //endregion
 }

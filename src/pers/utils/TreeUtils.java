@@ -6,12 +6,12 @@ import java.util.*;
 public class TreeUtils {
     public static void main(String[]args)
     {
-        int[] nums = {1,2,3,4,5,6,7};
+        int[] nums = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
         TreeNode tree = TreeUtils.createTreeByLevel(nums);
-        TreeUtils.levelTraverseExercise(tree);
-        StringBuffer sbf = new StringBuffer();
-        sbf.append("sss");
-        System.out.println(sbf.toString());
+        zShapeLevelTraverse(tree);
+//        StringBuffer sbf = new StringBuffer();
+//        sbf.append("sss");
+//        System.out.println(sbf.toString());
     }
 
     //从前序遍历得到一棵树
@@ -191,6 +191,41 @@ public class TreeUtils {
             if(node.right!=null) queue.add(node.right);
         }
     }
+    public static void zShapeLevelTraverse(TreeNode treeNode) {
+        //给一个二叉树，之字形打印，设定一个标志位，奇数层从右向左打印，偶数层从左向右打印
+        //可以用两个栈实现
+        //         1
+        //    2          3
+        //  4   5     6     7
+        //8 9 10 11 12 13 14 15
+        //打印顺序1 3 2 4 5 6 7 15 14 13
+        if (treeNode == null) return;
+        Stack<TreeNode> stack1 = new Stack<>();
+        Stack<TreeNode> stack2 = new Stack<>();
+        stack1.push(treeNode);
+        while (stack1.size() != 0 || stack2.size() != 0) {
+            if (stack1.size() == 0) {
+                while (stack2.size() != 0) {
+                    TreeNode node2 = stack2.pop();
+                    System.out.println(node2.val);
+                    if (node2.left != null)
+                        stack1.push(node2.right);
+                    if (node2.left != null)
+                        stack1.push(node2.left);
+                }
+            }
+            if (stack2.size() == 0) {
+                while (stack1.size() != 0) {
+                    TreeNode node1 = stack1.pop();
+                    System.out.println(node1.val);
+                    if (node1.left != null)
+                        stack2.push(node1.left);
+                    if (node1.left != null)
+                        stack2.push(node1.right);
+                }
+            }
+        }
+    }
     //endregion
     //region 层序遍历 通过数组的形式返回每一层的数据
     public List<List<Integer>> levelOrder(TreeNode root) {
@@ -253,44 +288,9 @@ public class TreeUtils {
         return node;
     }
     //endregion
-    //region 层序遍历练习(遍历)
-    public static void levelTraverseExercise(TreeNode root)
-    {
-        //遍历法
-        if(root == null) return;
-        int depth = depth(root);
-        for(int i=1;i<=depth;i++)
-        {
-            levelTraverseExercise(root,i);
-        }
-    }
-    public static void levelTraverseExercise(TreeNode node,int depth)
-    {
-        if(node == null) return;
-        if(depth == 0) return;
-        if(depth==1)
-            System.out.println(node.val);
-        else
-        {
-            levelTraverseExercise(node.left,depth-1);
-            levelTraverseExercise(node.right,depth-1);
-        }
-    }
+    //region 各种遍历的非递归解法
+//    private void
     //endregion
-    //region 层序遍历练习(非遍历)
-    public static void nonRecurLevelTraverseExc(TreeNode root)
-    {
-        if(root==null) return;
-        Queue<TreeNode> queue = new LinkedList<TreeNode>();
-        queue.add(root);
-        while(!queue.isEmpty())
-        {
-            TreeNode node = queue.poll();
-            System.out.println(node.val);
-            if(node.left!=null) queue.add(node.left);
-            if(node.right!=null) queue.add(node.right);
-        }
-    }
-    //endregion
+
 
 }
